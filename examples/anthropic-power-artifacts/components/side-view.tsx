@@ -22,8 +22,9 @@ export function SideView({
   if (!toolInvocation || !data) {
     return null
   }
-
+  // console.log('data:',data)
   const { args, result }: { args: Record<string, any>, result?: CodeExecResult } = toolInvocation
+  // console.log('SideView:',result)
   let latestData: any = {
     state: 'initial',
   }

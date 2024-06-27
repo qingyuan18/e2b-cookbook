@@ -29,7 +29,7 @@ export function Chat({
                   <Terminal strokeWidth={2} className="text-[#FF8800]"/>
                 </div>
                 <div className="p-2 flex flex-col space-y-1 justify-start items-start min-w-[100px]">
-                  {message.toolInvocations[0].toolName === "runPython" &&
+                  {(message.toolInvocations[0].toolName === "runPython" || message.toolInvocations[0].toolName === "runJs" )&&
                     <>
                       <span className="font-bold font-sans text-sm">{message.toolInvocations[0].args.title}</span>
                       <span className="font-sans text-sm">{message.toolInvocations[0].args.description}</span>

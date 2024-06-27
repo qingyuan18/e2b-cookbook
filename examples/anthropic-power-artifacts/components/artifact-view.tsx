@@ -30,6 +30,20 @@ function LogsOutput({ stdout, stderr }: {
   )
 }
 
+const IframeExample = ({iframeContent}:{iframeContent:string}) => {
+  return (
+    <div>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: `<iframe srcdoc="${encodeURIComponent(iframeContent)}" width="100%" height="500px" frameBorder="1"  sandbox="allow-same-origin allow-scripts" ></iframe>`,
+        }}
+      />
+    </div>
+  );
+};
+
+
+
 export interface CodeExecResult {
   stdout: string[]
   stderr: string[]
@@ -42,10 +56,10 @@ export function ArtifactView({
 }: {
   result?: CodeExecResult
 }) {
+  // console.log('ArtifactView.result', result);
   if (!result) return null
-  console.log('result', result)
+ 
   const { cellResults, stdout, stderr, runtimeError } = result
-
   // The AI-generated code experienced runtime error
   if (runtimeError) {
     const { name, value, tracebackRaw } = runtimeError
@@ -66,20 +80,35 @@ export function ArtifactView({
   // TODO: Show all results
   // TODO: Check other formats than `png`
   if (cellResults.length > 0) {
-    const imgInBase64 = cellResults[0].png
-    return (
-      <>
-        <div className="w-full flex-1 p-4 flex items-start justify-center">
-          <Image
-            src={`data:image/png;base64,${imgInBase64}`}
-            alt="result"
-            width={600}
-            height={400}
-          />
-        </div>
-        <LogsOutput stdout={stdout} stderr={stderr} />
-      </>
-    )
+    if (cellResults[0].png){
+      const imgInBase64 = cellResults[0].png
+      return (
+        <>
+          <div className="w-full flex-1 p-4 flex items-start justify-center">
+            <Image
+              src={`data:image/png;base64,${imgInBase64}`}
+              alt="result"
+              width={600}
+              height={400}
+            />
+          </div>
+          <LogsOutput stdout={stdout} stderr={stderr} />
+        </>
+      )
+    }else if (cellResults[0].html){
+      console.log('ArtifactView.cellResults', cellResults);
+      return( 
+        // <div className="w-full flex-1 p-4 flex items-start justify-center">
+          <iframe
+          srcDoc={cellResults[0].html}
+          width="100%"
+          height="100%"
+          sandbox="allow-same-origin allow-scripts"
+        /> 
+        //  </div>
+      )
+    }
+
   }
 
   // No cell results, but there is stdout or stderr
@@ -88,7 +117,6 @@ export function ArtifactView({
       <LogsOutput stdout={stdout} stderr={stderr} />
     )
   }
-
   return (
     <span>No output or logs</span>
   )

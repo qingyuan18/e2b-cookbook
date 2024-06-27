@@ -14,12 +14,13 @@ export default function Home() {
     api: '/api/chat',
     body: { userID },
   })
-  console.log({ messages, data })
+  // console.log({ messages, data })
 
   // For simplicity, we care only about the latest message that has a tool invocation
   const latestMessageWithToolInvocation = [...messages].reverse().find(message => message.toolInvocations && message.toolInvocations.length > 0)
   // Get the latest tool invocation
   const latestToolInvocation = latestMessageWithToolInvocation?.toolInvocations?.[0]
+  // console.log('latestToolInvocation:',latestToolInvocation)
 
   return (
     <main className="flex min-h-screen max-h-screen">

@@ -7,7 +7,8 @@ import {
 export async function POST(req: Request) {
   const { userID, code, file, command }: { userID: string, code: string, file: string, command: string } = await req.json()
   const sbx = await createOrConnect(userID)
-
+  console.log('get sandbox')
+  //const sbx = await Sandbox.create({ template: 'new_sandbox2' }) 
 
   const url = `https://${sbx.getHostname()}`
 
